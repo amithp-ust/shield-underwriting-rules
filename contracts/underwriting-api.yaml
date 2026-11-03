@@ -1,0 +1,32 @@
+openapi: 3.1.0
+info:
+  title: Shield Underwriting Rules
+  version: 0.1.0
+  description: Synthetic callable fixture; no HTTP adapter is deployed.
+paths:
+  /underwriting/evaluate:
+    post:
+      operationId: evaluate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [applicant_age, coverage_cents]
+              properties:
+                applicant_age: {type: integer, minimum: 0, maximum: 120}
+                coverage_cents: {type: integer, minimum: 1}
+      responses:
+        "200":
+          description: Eligibility decision and annual premium in USD cents.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [eligible, premium_cents]
+                properties:
+                  eligible: {type: boolean}
+                  premium_cents: {type: integer, minimum: 0}
+        "400":
+          description: Invalid applicant age or coverage amount.
